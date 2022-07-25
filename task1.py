@@ -13,21 +13,23 @@
 import sys
 
 
-def binary_search_char(array, left_char, right_char, left, right):
+def binary_search_char_loop(array, left_char, right_char):
     """Returns left_char -> right_char transition index
 
     Time complexity: O(log(n))
     Memory space complexity: O(n)
     """
-    if left + 1 == right:
-        if array[left] == left_char and array[right] == right_char:
-            return right
-        return -1
-    mid = (left + right) // 2
-    if array[mid] == right_char:
-        return binary_search_char(array, left_char, right_char, left, mid)
-    else:
-        return binary_search_char(array, left_char, right_char, mid, right)
+    left = 0
+    right = len(array) - 1
+    while (left + 1 < right):
+        mid = (left + right) // 2
+        if array[mid] == right_char:
+            right = mid
+        else:
+            left = mid
+    if array[left] == left_char and array[right] == right_char:
+        return right
+    return -1
 
 
 def task(array: str) -> str:
@@ -36,7 +38,7 @@ def task(array: str) -> str:
     Returns index of transition one to zero.
     Returns `-1` if no transition is found.
     """
-    position = binary_search_char(array, '1', '0', 0, len(array) - 1)
+    position = binary_search_char_loop(array, '1', '0')
     return f'OUT: {position}'
 
 
