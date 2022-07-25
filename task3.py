@@ -43,13 +43,14 @@ def intervals_intersection(intervals_collection: List[List[int]]) -> int:
     """Returns intervals intersection for linear (non circular) time"""
     def make_pairs(intervals: List[int]) -> List[Tuple[int, int]]:
         """Make interval pairs
-        
+
         Use even list index as interval start
         use odd list index as invetrval end
-        Note: input list has to have even number of elements 
+        Note: input list has to have even number of elements
         """
-        return [(left, right) 
+        return [(left, right)
                 for left, right in zip(intervals[::2], intervals[1::2])]
+
     def intersections(a: List[Tuple[int, int]], b: List[Tuple[int, int]]):
         """Calculate intersections between two input lists of intervals"""
         pairs = []
