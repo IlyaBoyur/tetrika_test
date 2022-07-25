@@ -19,6 +19,8 @@ def binary_search_char_loop(array, left_char, right_char):
     Time complexity: O(log(n))
     Memory space complexity: O(n)
     """
+    if len(array) < 2:
+        return -1
     left = 0
     right = len(array) - 1
     while (left + 1 < right):
