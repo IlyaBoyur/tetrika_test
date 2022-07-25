@@ -15,10 +15,12 @@
 # время входа на урок, под нечетными - время выхода с урока.
 # Нужно написать функцию, которая получает на вход словарь с интервалами и
 # возвращает время общего присутствия ученика и учителя на уроке (в секундах).
-from typing import Dict, List
+from typing import Dict, Tuple
 
 
-def intervals_clean(intervals_collection: List[List[int]]) -> List[List[int]]:
+def intervals_clean(
+    intervals_collection: Tuple[Tuple[int]]
+) -> Tuple[Tuple[int]]:
     """Returns list of non overlapping intervals
     for intervals in intervals collection"""
     result = []
@@ -34,13 +36,12 @@ def intervals_clean(intervals_collection: List[List[int]]) -> List[List[int]]:
             else:
                 # add new interval
                 pairs.append((left, right),)
-        result.append(pairs)
-    return result
+        result.append(tuple(pairs))
+    return tuple(result)
 
 
 def intervals_intersection(inter1, inter2, inter3) -> int:
-    'Returns intervals intersection for linear (non curcular) time'
-    # for interval in intervals:
+    """Returns intervals intersection for linear (non circular) time"""
     pairs = []
     for a1, a2 in inter1:
         for b1, b2 in inter2:
@@ -57,10 +58,19 @@ def intervals_intersection(inter1, inter2, inter3) -> int:
     return sum(right - left for left, right in result)
 
 
-def appearance(intervals: Dict[str, List[int]]) -> int:
-    'Returns intersection for lesson, pupil and tutor'
+def appearance(intervals: Dict[str, Tuple[int]]) -> int:
+    """Returns intersection for lesson, pupil and tutor"""
     lesson = intervals['lesson']
     pupil = intervals['pupil']
     tutor = intervals['tutor']
-    res1, res2, res3 = intervals_clean([lesson, pupil, tutor])
-    return intervals_intersection(res1, res2, res3)
+    cleaned = intervals_clean(tuple([lesson, pupil, tutor]))
+    return intervals_intersection(cleaned[0], cleaned[1], cleaned[2])
+
+
+if __name__ == '__main__':
+    data = {'lesson': (1594692000, 1594695600),
+            'pupil': (1594692033, 1594696347),
+            'tutor': (1594692017, 1594692066, 1594692068, 1594696341)}
+    expected = 3565
+    actual = appearance(data)
+    assert actual == expected, f'Error: got {actual}, expected {expected}'
