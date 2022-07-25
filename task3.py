@@ -39,7 +39,7 @@ def intervals_clean(intervals_collection: List[List[int]]) -> List[List[int]]:
     return result
 
 
-def intervals_intersection(inter1, inter2, inter3) -> int:
+def intervals_intersection(intervals_collection: List[List[int]]) -> int:
     """Returns intervals intersection for linear (non circular) time"""
     def make_pairs(intervals: List[int]) -> List[Tuple[int, int]]:
         """Make interval pairs
@@ -59,9 +59,11 @@ def intervals_intersection(inter1, inter2, inter3) -> int:
                     # intersection exists
                     pairs.append((max(a1, b1), min(a2, b2)))
         return pairs
-    
-    new_inter = intersections(make_pairs(inter1), make_pairs(inter2))
-    result = intersections(new_inter, make_pairs(inter3))
+
+    # Get all intersections for intervals collection
+    result = make_pairs(intervals_collection[0])
+    for intervals in intervals_collection[1:]:
+        result = intersections(result, make_pairs(intervals))
     return sum(right - left for left, right in result)
 
 
@@ -70,8 +72,7 @@ def appearance(intervals: Dict[str, List[int]]) -> int:
     lesson = intervals['lesson']
     pupil = intervals['pupil']
     tutor = intervals['tutor']
-    cleaned = intervals_clean([lesson, pupil, tutor])
-    return intervals_intersection(cleaned[0], cleaned[1], cleaned[2])
+    return intervals_intersection(intervals_clean([lesson, pupil, tutor]))
 
 
 if __name__ == '__main__':
