@@ -41,19 +41,27 @@ def intervals_clean(intervals_collection: List[List[int]]) -> List[List[int]]:
 
 def intervals_intersection(inter1, inter2, inter3) -> int:
     """Returns intervals intersection for linear (non circular) time"""
-    pairs = []
-    for a1, a2 in inter1:
-        for b1, b2 in inter2:
-            if b1 < a2 and a1 < b2:
-                # intersection with last interval
-                pairs.append((max(a1, b1), min(a2, b2)))
-    result = []
-    for a1, a2 in pairs:
-        for b1, b2 in inter3:
-            if b1 < a2 and a1 < b2:
-                # intersection with last interval
-                result.append((max(a1, b1), min(a2, b2)))
-
+    def make_pairs(intervals: List[int]) -> List[Tuple[int, int]]:
+        """Make interval pairs
+        
+        Use even list index as interval start
+        use odd list index as invetrval end
+        Note: input list has to have even number of elements 
+        """
+        return [(left, right) 
+                for left, right in zip(intervals[::2], intervals[1::2])]
+    def intersections(a: List[Tuple[int, int]], b: List[Tuple[int, int]]):
+        """Calculate intersections between two input lists of intervals"""
+        pairs = []
+        for a1, a2 in a:
+            for b1, b2 in b:
+                if b1 < a2 and a1 < b2:
+                    # intersection exists
+                    pairs.append((max(a1, b1), min(a2, b2)))
+        return pairs
+    
+    new_inter = intersections(make_pairs(inter1), make_pairs(inter2))
+    result = intersections(new_inter, make_pairs(inter3))
     return sum(right - left for left, right in result)
 
 
