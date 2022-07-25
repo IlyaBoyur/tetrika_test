@@ -13,7 +13,9 @@
 import sys
 
 
-def binary_search_char_loop(array, left_char, right_char):
+def binary_search_char_loop(array: str,
+                            left_char: str,
+                            right_char: str) -> int:
     """Returns left_char -> right_char transition index
 
     Time complexity: O(log(n))
