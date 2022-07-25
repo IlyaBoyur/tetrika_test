@@ -15,12 +15,10 @@
 # время входа на урок, под нечетными - время выхода с урока.
 # Нужно написать функцию, которая получает на вход словарь с интервалами и
 # возвращает время общего присутствия ученика и учителя на уроке (в секундах).
-from typing import Dict, Tuple
+from typing import Dict, List, Tuple
 
 
-def intervals_clean(
-    intervals_collection: Tuple[Tuple[int]]
-) -> Tuple[Tuple[int]]:
+def intervals_clean(intervals_collection: List[List[int]]) -> List[List[int]]:
     """Returns list of non overlapping intervals
     for intervals in intervals collection"""
     result = []
@@ -36,8 +34,9 @@ def intervals_clean(
             else:
                 # add new interval
                 pairs.append((left, right),)
-        result.append(tuple(pairs))
-    return tuple(result)
+        # Flatten list of pairs
+        result.append([value for sublist in pairs for value in sublist])
+    return result
 
 
 def intervals_intersection(inter1, inter2, inter3) -> int:
@@ -58,12 +57,12 @@ def intervals_intersection(inter1, inter2, inter3) -> int:
     return sum(right - left for left, right in result)
 
 
-def appearance(intervals: Dict[str, Tuple[int]]) -> int:
+def appearance(intervals: Dict[str, List[int]]) -> int:
     """Returns intersection for lesson, pupil and tutor"""
     lesson = intervals['lesson']
     pupil = intervals['pupil']
     tutor = intervals['tutor']
-    cleaned = intervals_clean(tuple([lesson, pupil, tutor]))
+    cleaned = intervals_clean([lesson, pupil, tutor])
     return intervals_intersection(cleaned[0], cleaned[1], cleaned[2])
 
 
