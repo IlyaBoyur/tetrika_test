@@ -77,9 +77,27 @@ def appearance(intervals: Dict[str, List[int]]) -> int:
 
 
 if __name__ == '__main__':
-    data = {'lesson': (1594692000, 1594695600),
-            'pupil': (1594692033, 1594696347),
-            'tutor': (1594692017, 1594692066, 1594692068, 1594696341)}
-    expected = 3565
-    actual = appearance(data)
-    assert actual == expected, f'Error: got {actual}, expected {expected}'
+    def check_start_end(intervals):
+        for start, end in zip(intervals[::2], intervals[1::2]):
+            if end < start:
+                raise RuntimeError(
+                    f'Начало интервала {start} > конца интервала {end}'
+                )
+    while(True):
+        print('Введите массив lesson. Формат: ')
+        print('<start> <end>')
+        lesson = [int(number) for number in input().split()]
+        check_start_end(lesson)
+        print('Введите массив pupil. Формат: ')
+        print('<start1> <end1> <start2> <end2> ..')
+        pupil = [int(number) for number in input().split()]
+        check_start_end(pupil)
+        print('Введите массив tutor. Формат: ')
+        print('<start1> <end1> <start2> <end2> ..')
+        tutor = [int(number) for number in input().split()]
+        check_start_end(tutor)
+        data = {'lesson': lesson,
+                'pupil': pupil,
+                'tutor': tutor}
+        print(f'Пересечение интервалов: {appearance(data)}')
+        
