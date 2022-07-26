@@ -64,14 +64,14 @@ def is_name_cyrillic(name: List[str]) -> bool:
 def calculate_page_counts(site: pywikibot.BaseSite,
                           category: str = CATEGORY,
                           page_filter: PageFilter = noun_title_page_filter,
-                          page_attribute: PageAttr = first_char_page_attribute):
+                          page_attr: PageAttr = first_char_page_attribute):
     """Calculate Wikipedia page counts by specified attribute.
 
     :param site: pywikibot.Site class instance
     :param category: page category which is examined
     :param page_filter: filter for pages in specified category. Defaults to
     "first word is a cyrillic noun" filter.
-    :param page_attribute: attribute to be calculated for page. Defaults to
+    :param page_attr: attribute to be calculated for page. Defaults to
     first char in page`s title.
     """
     def sort_key(element: Tuple[str, int]) -> Tuple:
@@ -84,7 +84,7 @@ def calculate_page_counts(site: pywikibot.BaseSite,
         pagegenerators.CategorizedPageGenerator(category_page)
     )
     return sorted(Counter(
-        page_attribute(page)
+        page_attr(page)
         for page in tqdm(page_generator,
                          desc=PROGRESS_INFO.format(category=category),
                          total=category_page.categoryinfo['pages'])
