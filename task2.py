@@ -15,7 +15,7 @@
 # В:....
 import unicodedata
 from collections import Counter
-from typing import List
+from typing import Callable, List, Tuple
 
 import pywikibot
 from pyuca import Collator
@@ -27,13 +27,15 @@ CATEGORY = 'Категория:Животные по алфавиту'
 PROGRESS_INFO = 'Обработка страниц Wikipedia. {category}'
 
 
-def first_char_page_attribute(page) -> str:
+PageAttr = Callable[[pywikibot.Page], str]
+PageFilter = Callable[[pywikibot.Page], bool]
+
+def first_char_page_attribute(page: pywikibot.Page) -> str:
     """Specify page attribute: page title`s first character"""
     return page.title().split()[0][0].capitalize()
-    # return page.title().split()[0]
 
 
-def noun_title_page_filter(page) -> bool:
+def noun_title_page_filter(page: pywikibot.Page) -> bool:
     """Specify page filter: page title`s first word is a cyrillic noun"""
     name = page.title().split()
     return (
@@ -59,10 +61,10 @@ def is_name_cyrillic(name: List[str]) -> bool:
     return CYRILLIC == unicodedata.name(name[0][0]).split()[0]
 
 
-def calculate_page_counts(site,
-                          category=CATEGORY,
-                          page_filter=noun_title_page_filter,
-                          page_attribute=first_char_page_attribute):
+def calculate_page_counts(site: pywikibot.BaseSite,
+                          category: str = CATEGORY,
+                          page_filter: PageFilter = noun_title_page_filter,
+                          page_attribute: PageAttr = first_char_page_attribute):
     """Calculate Wikipedia page counts by specified attribute.
 
     :param site: pywikibot.Site class instance
@@ -72,7 +74,7 @@ def calculate_page_counts(site,
     :param page_attribute: attribute to be calculated for page. Defaults to
     first char in page`s title.
     """
-    def sort_key(element):
+    def sort_key(element: Tuple[str, int]) -> Tuple:
         """Encupsulates page_attribute sort key"""
         char, _ = element
         return Collator().sort_key(char)
