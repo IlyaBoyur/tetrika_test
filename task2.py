@@ -18,6 +18,7 @@ from collections import Counter
 from typing import List
 
 import pywikibot
+from pyuca import Collator
 from pywikibot import pagegenerators
 from tqdm import tqdm
 
@@ -71,7 +72,11 @@ def calculate_page_counts(site,
     :param page_attribute: attribute to be calculated for page. Defaults to
     first char in page`s title.
     """
-    category_page = pywikibot.Category(site, title=category, sort_key='title')
+    def sort_key(element):
+        """Encupsulates page_attribute sort key"""
+        char, _ = element
+        return Collator().sort_key(char)
+    category_page = pywikibot.Category(site, title=category)
     page_generator = filter(
         page_filter,
         pagegenerators.CategorizedPageGenerator(category_page)
@@ -81,7 +86,7 @@ def calculate_page_counts(site,
         for page in tqdm(page_generator,
                          desc=PROGRESS_INFO.format(category=category),
                          total=category_page.categoryinfo['pages'])
-    ).items(), key=lambda item: ord(item[0]))
+    ).items(), key=sort_key)
 
 
 if __name__ == '__main__':
