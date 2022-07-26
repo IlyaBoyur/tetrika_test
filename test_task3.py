@@ -1,4 +1,5 @@
 import pytest
+
 from task3 import appearance
 
 

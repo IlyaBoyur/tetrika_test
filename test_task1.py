@@ -16,5 +16,5 @@ from task1 import task
      ['111110', 'OUT: 5'],
      ['100000000', 'OUT: 1'],)
 )
-def test_task(array, expected):
+def test_task1(array, expected):
     assert task(array) == expected
