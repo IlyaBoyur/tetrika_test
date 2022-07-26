@@ -18,7 +18,7 @@ def any_attribute(page):
     return 'total'
 
 
-def test_task2():
+if __name__ == '__main__':
     """Here example usage is showed"""
     site = pywikibot.Site('ru')
     print(calculate_page_counts(site))
@@ -31,10 +31,3 @@ def test_task2():
     print(calculate_page_counts(site, 'Категория:Автомобили по алфавиту',
                                 no_filter,
                                 any_attribute))
-
-
-if __name__ == '__main__':
-    # test_task2()
-    import unicodedata
-    for i in 'абвгдАБВГД':
-        print(unicodedata.name(i))
